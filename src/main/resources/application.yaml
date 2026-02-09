@@ -4,11 +4,10 @@ spring:
 
 security:
   jwt:
-    secret: "change-me-please-change-me-please-change-me-please-1234"
+    secret: "LetsPlay_JWT_Secret_9fA3xQ7M2PZLwRk8eD5VJcB4HnS6Y0T"
     expiration-ms: 3600000
 
 app:
   seed-admin:
     username: admin
     password: admin123
-

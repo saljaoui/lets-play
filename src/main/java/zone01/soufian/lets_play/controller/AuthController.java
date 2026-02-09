@@ -14,6 +14,7 @@ import zone01.soufian.lets_play.dto.auth.AuthResponse;
 import zone01.soufian.lets_play.dto.auth.LoginRequest;
 import zone01.soufian.lets_play.dto.auth.RegisterRequest;
 import zone01.soufian.lets_play.dto.user.UserResponse;
+import zone01.soufian.lets_play.model.Role;
 import zone01.soufian.lets_play.model.User;
 import zone01.soufian.lets_play.service.AuthService;
 
@@ -31,10 +32,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public AuthResponse login(@RequestBody LoginRequest request) {
-        System.out.println("----------------------------");
-        System.out.println("Login attempt: " + request);
         String token = authService.login(request.username(), request.password());
-        System.out.println("Generated token: " + token);
         return new AuthResponse(token);
     }
 
@@ -43,7 +41,7 @@ public class AuthController {
         User user = User.builder()
             .username(request.username())
             .password(request.password())
-            .role(request.role())
+            .role(Role.ADMIN)
             .build();
         User saved = authService.register(user);
         return ResponseEntity.ok(new UserResponse(saved.getId(), saved.getUsername(), saved.getRole()));

@@ -34,7 +34,6 @@ public class AuthService {
     }
 
     public User registerAdmin(User user) {
-        user.setRole(Role.ADMIN);
         user.setPassword(
                 passwordEncoder.encode(user.getPassword()));
         return userService.save(user);

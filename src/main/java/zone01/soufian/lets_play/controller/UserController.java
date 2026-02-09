@@ -43,8 +43,6 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserResponse> create(@RequestBody UserRequest request) {
-        System.out.println("----------------------------");
-        System.out.println("Creating user: " + request);
         User user = User.builder()
             .username(request.username())
             .password(request.password())
