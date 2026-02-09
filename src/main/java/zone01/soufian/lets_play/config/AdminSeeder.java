@@ -1,5 +1,8 @@
 package zone01.soufian.lets_play.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +16,9 @@ import zone01.soufian.lets_play.repository.UserRepository;
 @Configuration
 public class AdminSeeder {
 
+    private static final Logger log =
+            LoggerFactory.getLogger(AdminSeeder.class);
+
     @Bean
     ApplicationRunner seedAdmin(
             UserRepository userRepository,
@@ -24,7 +30,7 @@ public class AdminSeeder {
         return args -> {
 
             if (userRepository.existsByUsername(username)) {
-                System.out.println("ℹ️ Admin already exists, skipping seeding.");
+                log.info("Admin user '{}' already exists. Skipping seeding.", username);
                 return;
             }
 
@@ -34,7 +40,8 @@ public class AdminSeeder {
             admin.setRole(Role.ADMIN);
 
             userRepository.save(admin);
+
+            log.info("✅ Default admin user '{}' created successfully.", username);
         };
     }
 }
-
