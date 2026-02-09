@@ -29,7 +29,6 @@ import zone01.soufian.lets_play.security.JwtAuthFilter;
 public class SecurityConfig {
 
     private final UserRepository userRepository;
-    private final JwtAuthFilter jwtAuthFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -55,7 +54,9 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationProvider authenticationProvider) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,
+                                                   AuthenticationProvider authenticationProvider,
+                                                   JwtAuthFilter jwtAuthFilter) throws Exception {
         
         return http
             .csrf(csrf -> csrf.disable())

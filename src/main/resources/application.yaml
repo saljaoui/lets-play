@@ -1,3 +1,8 @@
 spring:
   application:
     name: lets-play
+
+security:
+  jwt:
+    secret: "change-me-please-change-me-please-change-me-please-1234"
+    expiration-ms: 3600000

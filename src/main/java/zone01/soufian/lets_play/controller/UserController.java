@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import zone01.soufian.lets_play.dto.user.UserRequest;
 import zone01.soufian.lets_play.dto.user.UserResponse;
 import zone01.soufian.lets_play.model.User;
+import zone01.soufian.lets_play.service.AuthService;
 import zone01.soufian.lets_play.service.UserService;
 
 @RestController
@@ -23,6 +24,7 @@ import zone01.soufian.lets_play.service.UserService;
 public class UserController {
 
     private final UserService userService;
+    private final AuthService authService;
 
     @GetMapping
     public List<UserResponse> list() {
@@ -41,12 +43,14 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserResponse> create(@RequestBody UserRequest request) {
+        System.out.println("----------------------------");
+        System.out.println("Creating user: " + request);
         User user = User.builder()
             .username(request.username())
             .password(request.password())
             .role(request.role())
             .build();
-        User saved = userService.save(user);
+        User saved = authService.register(user);
         return ResponseEntity.ok(toResponse(saved));
     }
 
