@@ -7,4 +7,5 @@ import zone01.soufian.lets_play.model.User;
 
 public interface UserRepository extends MongoRepository<User, String> {
     Optional<User> findByUsername(String username);
+    boolean existsByUsername(String username);
 }

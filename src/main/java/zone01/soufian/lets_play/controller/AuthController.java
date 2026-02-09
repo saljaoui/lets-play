@@ -31,7 +31,10 @@ public class AuthController {
 
     @PostMapping("/login")
     public AuthResponse login(@RequestBody LoginRequest request) {
+        System.out.println("----------------------------");
+        System.out.println("Login attempt: " + request);
         String token = authService.login(request.username(), request.password());
+        System.out.println("Generated token: " + token);
         return new AuthResponse(token);
     }
 

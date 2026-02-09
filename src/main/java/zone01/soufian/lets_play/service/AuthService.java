@@ -21,18 +21,23 @@ public class AuthService {
 
     public String login(String username, String password) {
         authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(username, password)
-        );
+                new UsernamePasswordAuthenticationToken(username, password));
         User user = userService.findByUsername(username)
-            .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
         return jwtService.generateToken(user);
     }
 
     public User register(User user) {
-        if (user.getRole() == null) {
-            user.setRole(Role.USER);
-        }
+        user.setRole(Role.USER);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userService.save(user);
     }
+
+    public User registerAdmin(User user) {
+        user.setRole(Role.ADMIN);
+        user.setPassword(
+                passwordEncoder.encode(user.getPassword()));
+        return userService.save(user);
+    }
+
 }
