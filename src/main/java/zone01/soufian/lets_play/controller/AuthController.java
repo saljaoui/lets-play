@@ -41,7 +41,7 @@ public class AuthController {
         User user = User.builder()
             .username(request.username())
             .password(request.password())
-            .role(Role.ADMIN)
+            .role(Role.USER)
             .build();
         User saved = authService.register(user);
         return ResponseEntity.ok(new UserResponse(saved.getId(), saved.getUsername(), saved.getRole()));

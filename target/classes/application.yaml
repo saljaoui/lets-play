@@ -4,7 +4,7 @@ spring:
 
 security:
   jwt:
-    secret: "LetsPlay_JWT_Secret_9fA3xQ7M2PZLwRk8eD5VJcB4HnS6Y0T"
+    secret: "SOUFIANsoufianSOUFIANsoufianSOUFIANsoufianSOUFIANsoufian"
     expiration-ms: 3600000
 
 app:

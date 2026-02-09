@@ -48,6 +48,8 @@ public class JwtService {
     }
 
     public String generateToken(UserDetails userDetails) {
+        System.out.println(this.secret);
+        System.out.println(this.expirationMs);
         return generateToken(Map.of(), userDetails);
     }
 

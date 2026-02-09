@@ -7,7 +7,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import zone01.soufian.lets_play.model.Role;
 import zone01.soufian.lets_play.model.User;
 import zone01.soufian.lets_play.security.JwtService;
 
@@ -28,7 +27,6 @@ public class AuthService {
     }
 
     public User register(User user) {
-        user.setRole(Role.USER);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userService.save(user);
     }
