@@ -32,11 +32,4 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userService.save(user);
     }
-
-    public User registerAdmin(User user) {
-        user.setPassword(
-                passwordEncoder.encode(user.getPassword()));
-        return userService.save(user);
-    }
-
 }
