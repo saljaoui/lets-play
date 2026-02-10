@@ -45,6 +45,7 @@ public class UserController {
     public ResponseEntity<UserResponse> create(@RequestBody UserRequest request) {
         User user = User.builder()
             .username(request.username())
+            .email(request.email())
             .password(request.password())
             .role(request.role())
             .build();
@@ -59,6 +60,6 @@ public class UserController {
     }
 
     private static UserResponse toResponse(User user) {
-        return new UserResponse(user.getId(), user.getUsername(), user.getRole());
+        return new UserResponse(user.getId(), user.getUsername(), user.getEmail(), user.getRole());
     }
 }

@@ -23,6 +23,7 @@ public class AdminSeeder {
     ApplicationRunner seedAdmin(
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
+            @Value("${app.seed-admin.email}") String email,
             @Value("${app.seed-admin.username}") String username,
             @Value("${app.seed-admin.password}") String password
     ) {
@@ -36,6 +37,7 @@ public class AdminSeeder {
 
             User admin = new User();
             admin.setUsername(username);
+            admin.setEmail(email);
             admin.setPassword(passwordEncoder.encode(password));
             admin.setRole(Role.ADMIN);
 

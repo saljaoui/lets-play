@@ -18,11 +18,11 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
-    public String login(String username, String password) {
+    public String login(String usernameOrEmail, String password) {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(username, password));
-        User user = userService.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+                new UsernamePasswordAuthenticationToken(usernameOrEmail, password));
+        User user = userService.findByUsernameOrEmail(usernameOrEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + usernameOrEmail));
         return jwtService.generateToken(user);
     }
 

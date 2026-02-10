@@ -11,3 +11,4 @@ app:
   seed-admin:
     username: admin
     password: admin123
+    email: admin@letsplay.ma

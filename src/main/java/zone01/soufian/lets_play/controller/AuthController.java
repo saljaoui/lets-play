@@ -40,10 +40,11 @@ public class AuthController {
     public ResponseEntity<UserResponse> register(@Valid @RequestBody AuthRequest request) {
         User user = User.builder()
             .username(request.username())
+            .email(request.email())
             .password(request.password())
             .role(Role.USER)
             .build();
         User saved = authService.register(user);
-        return ResponseEntity.ok(new UserResponse(saved.getId(), saved.getUsername(), saved.getRole()));
+        return ResponseEntity.ok(new UserResponse(saved.getId(), saved.getUsername(), saved.getEmail(), saved.getRole()));
     }
 }

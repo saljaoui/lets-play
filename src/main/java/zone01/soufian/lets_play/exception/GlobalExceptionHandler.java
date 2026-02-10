@@ -55,7 +55,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({AuthenticationException.class, UsernameNotFoundException.class})
     public ResponseEntity<ApiError> handleAuthentication(Exception ex, HttpServletRequest request) {
-        return buildResponse(HttpStatus.UNAUTHORIZED, "Invalid username or password", request);
+        return buildResponse(HttpStatus.UNAUTHORIZED, "Invalid username/email or password", request);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
