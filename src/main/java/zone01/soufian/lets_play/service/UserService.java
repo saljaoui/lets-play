@@ -20,18 +20,6 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public Optional<User> findById(String id) {
-        return userRepository.findById(id);
-    }
-
-    public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
-
-    public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
-    }
-
     public Optional<User> findByUsernameOrEmail(String usernameOrEmail) {
         return userRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail);
     }
@@ -63,7 +51,4 @@ public class UserService {
         }
     }
 
-    public void delete(String id) {
-        userRepository.deleteById(id);
-    }
 }

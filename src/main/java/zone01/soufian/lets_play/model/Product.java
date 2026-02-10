@@ -31,5 +31,5 @@ public class Product {
 
     @NotBlank
     @Field("price")
-    private BigDecimal price;
+    private Double price;
 }
