@@ -24,39 +24,12 @@ import zone01.soufian.lets_play.service.UserService;
 public class UserController {
 
     private final UserService userService;
-    private final AuthService authService;
 
     @GetMapping
     public List<UserResponse> list() {
         return userService.findAll().stream()
             .map(UserController::toResponse)
             .toList();
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> get(@PathVariable String id) {
-        return userService.findById(id)
-            .map(UserController::toResponse)
-            .map(ResponseEntity::ok)
-            .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    @PostMapping
-    public ResponseEntity<UserResponse> create(@RequestBody UserRequest request) {
-        User user = User.builder()
-            .username(request.username())
-            .email(request.email())
-            .password(request.password())
-            .role(request.role())
-            .build();
-        User saved = authService.register(user);
-        return ResponseEntity.ok(toResponse(saved));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable String id) {
-        userService.delete(id);
-        return ResponseEntity.noContent().build();
     }
 
     private static UserResponse toResponse(User user) {
