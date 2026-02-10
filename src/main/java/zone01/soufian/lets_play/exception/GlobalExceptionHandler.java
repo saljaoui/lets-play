@@ -64,6 +64,15 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.FORBIDDEN, "Access denied", request);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiError> handleIllegalArgument(IllegalArgumentException ex,
+                                                          HttpServletRequest request) {
+        String message = ex.getMessage() == null || ex.getMessage().isBlank()
+            ? "Invalid request"
+            : ex.getMessage();
+        return buildResponse(HttpStatus.BAD_REQUEST, message, request);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleException(Exception ex, HttpServletRequest request) {
         log.error("Unhandled exception", ex);

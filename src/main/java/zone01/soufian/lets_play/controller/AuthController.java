@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import zone01.soufian.lets_play.dto.auth.AuthResponse;
-import zone01.soufian.lets_play.dto.auth.LoginRequest;
-import zone01.soufian.lets_play.dto.auth.RegisterRequest;
+import zone01.soufian.lets_play.dto.auth.AuthRequest;
 import zone01.soufian.lets_play.dto.user.UserResponse;
 import zone01.soufian.lets_play.model.Role;
 import zone01.soufian.lets_play.model.User;
@@ -31,13 +31,13 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public AuthResponse login(@RequestBody LoginRequest request) {
+    public AuthResponse login(@Valid @RequestBody AuthRequest request) {
         String token = authService.login(request.username(), request.password());
         return new AuthResponse(token);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponse> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<UserResponse> register(@Valid @RequestBody AuthRequest request) {
         User user = User.builder()
             .username(request.username())
             .password(request.password())
