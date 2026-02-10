@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,18 +22,22 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Document("users")
 public class User implements UserDetails {
-    
+
     @Id
     private String id;
 
+    @Field("username")
     @Indexed(unique = true)
     private String username;
 
+    @Field("email")
     @Indexed(unique = true, sparse = true)
     private String email;
 
+    @Field("password")
     private String password;
 
+    @Field("role")
     private Role role;
 
     @Override
