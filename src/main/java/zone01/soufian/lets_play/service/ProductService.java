@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import zone01.soufian.lets_play.exception.NotFoundException;
 import zone01.soufian.lets_play.model.Product;
 import zone01.soufian.lets_play.repository.ProductRepository;
 
@@ -27,6 +28,9 @@ public class ProductService {
     }
 
     public void delete(String id) {
+        if (!productRepository.existsById(id)) {
+            throw new NotFoundException("Product not found: " + id);
+        }
         productRepository.deleteById(id);
     }
 }

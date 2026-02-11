@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.mongodb.DuplicateKeyException;
 
 import lombok.RequiredArgsConstructor;
+import zone01.soufian.lets_play.exception.ConflictException;
 import zone01.soufian.lets_play.model.User;
 import zone01.soufian.lets_play.repository.UserRepository;
 
@@ -32,12 +33,12 @@ public class UserService {
             String email = user.getEmail() == null ? null : user.getEmail().toLowerCase().trim();
 
             if (userRepository.existsByUsername(username)) {
-                throw new IllegalArgumentException("Username already exists");
+                throw new ConflictException("Username already exists");
             }
 
             if (email != null && !email.isBlank()) {
                 if (userRepository.existsByEmail(email)) {
-                    throw new IllegalArgumentException("Email already exists");
+                    throw new ConflictException("Email already exists");
                 }
             }
 
@@ -47,7 +48,7 @@ public class UserService {
             return userRepository.save(user);
 
         } catch (DuplicateKeyException e) {
-            throw new IllegalArgumentException("Username or email already exists");
+            throw new ConflictException("Username or email already exists");
         }
     }
 
