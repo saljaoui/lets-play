@@ -1,12 +1,13 @@
 package zone01.soufian.lets_play.model;
 
-import java.math.BigDecimal;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,7 +30,12 @@ public class Product {
     @Field("description")
     private String description;
 
-    @NotBlank
+    @NotNull
+    @Positive
     @Field("price")
     private Double price;
+
+    @NotNull
+    @Field("userId")
+    private String userId;
 }
