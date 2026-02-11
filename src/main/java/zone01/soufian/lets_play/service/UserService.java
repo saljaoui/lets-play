@@ -78,7 +78,6 @@ public class UserService {
         return save(user);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     public User update(String id, UserUpdateRequest request, User actor) {
         User user = findById(id);
         boolean isAdmin = actor.getRole() == Role.ADMIN;
@@ -121,7 +120,6 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     public void delete(String id, User actor) {
         User user = findById(id);
         boolean isAdmin = actor.getRole() == Role.ADMIN;
