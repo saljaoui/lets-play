@@ -1,22 +1,25 @@
 package zone01.soufian.lets_play.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
 import zone01.soufian.lets_play.model.User;
 import zone01.soufian.lets_play.security.JwtService;
 
 @Service
-@RequiredArgsConstructor
 public class AuthService {
-    private final UserService userService;
-    private final AuthenticationManager authenticationManager;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private JwtService jwtService;
 
     public String login(String usernameOrEmail, String password) {
         authenticationManager.authenticate(

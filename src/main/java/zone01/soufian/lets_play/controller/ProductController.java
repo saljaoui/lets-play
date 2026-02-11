@@ -2,9 +2,9 @@ package zone01.soufian.lets_play.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.RequiredArgsConstructor;
+import jakarta.validation.Valid;
 import zone01.soufian.lets_play.dto.product.ProductRequest;
 import zone01.soufian.lets_play.dto.product.ProductResponse;
 import zone01.soufian.lets_play.model.Product;
@@ -22,11 +22,11 @@ import zone01.soufian.lets_play.model.User;
 import zone01.soufian.lets_play.service.ProductService;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/products")
 public class ProductController {
 
-    private final ProductService productService;
+    @Autowired
+    private ProductService productService;
 
     @GetMapping
     public List<ProductResponse> list() {
@@ -35,8 +35,14 @@ public class ProductController {
                 .toList();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductResponse> get(@PathVariable String id) {
+        Product product = productService.findById(id);
+        return ResponseEntity.ok(toResponse(product));
+    }
+
     @PostMapping
-    public ResponseEntity<ProductResponse> create(@RequestBody ProductRequest request,
+    public ResponseEntity<ProductResponse> create(@Valid @RequestBody ProductRequest request,
             @AuthenticationPrincipal User user) {
         Product product = Product.builder()
                 .name(request.name())
@@ -51,7 +57,7 @@ public class ProductController {
     @PutMapping("/{id}")
     public ResponseEntity<ProductResponse> update(
             @PathVariable String id,
-            @RequestBody ProductRequest request,
+            @Valid @RequestBody ProductRequest request,
             @AuthenticationPrincipal User user) {
         Product updated = productService.update(id, request, user);
 
@@ -72,4 +78,5 @@ public class ProductController {
                 product.getPrice(),
                 product.getUserId());
     }
+
 }

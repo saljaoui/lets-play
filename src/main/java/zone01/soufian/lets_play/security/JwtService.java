@@ -6,6 +6,10 @@ import java.util.Date;
 import java.util.Map;
 import java.util.function.Function;
 
+import jakarta.annotation.PostConstruct;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -15,20 +19,32 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
 
 @Service
 public class JwtService {
 
-    private final String secret;
-    private final long expirationMs;
+    private static final Logger log = LoggerFactory.getLogger(JwtService.class);
 
-    public JwtService(
-            @Value("${security.jwt.secret}") String secret,
-            @Value("${security.jwt.expiration-ms}") long expirationMs
-    ) {
-        this.secret = secret;
-        this.expirationMs = expirationMs;
+    @Value("${security.jwt.secret:}")
+    private String secret;
+
+    @Value("${security.jwt.expiration-ms:3600000}")
+    private long expirationMs;
+
+    @PostConstruct
+    void init() {
+        if (secret == null || secret.isBlank()) {
+            secret = generateSecret();
+            log.warn("JWT_SECRET is not set. Generated a temporary secret for this run.");
+            return;
+        }
+
+        if (resolveKeyBytes(secret).length < 32) {
+            log.warn("JWT_SECRET is too short (min 32 bytes). Generated a temporary secret for this run.");
+            secret = generateSecret();
+        }
     }
 
     public String extractUsername(String token) {
@@ -82,12 +98,19 @@ public class JwtService {
     }
 
     private Key getSigningKey() {
-        byte[] keyBytes;
-        try {
-            keyBytes = Decoders.BASE64.decode(secret);
-        } catch (IllegalArgumentException e) {
-            keyBytes = secret.getBytes(StandardCharsets.UTF_8);
-        }
+        byte[] keyBytes = resolveKeyBytes(secret);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    private byte[] resolveKeyBytes(String value) {
+        try {
+            return Decoders.BASE64.decode(value);
+        } catch (IllegalArgumentException e) {
+            return value.getBytes(StandardCharsets.UTF_8);
+        }
+    }
+
+    private String generateSecret() {
+        return Encoders.BASE64.encode(Keys.secretKeyFor(SignatureAlgorithm.HS256).getEncoded());
     }
 }

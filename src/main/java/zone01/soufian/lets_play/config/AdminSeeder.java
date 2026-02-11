@@ -29,6 +29,12 @@ public class AdminSeeder {
     ) {
 
         return args -> {
+            if (username == null || username.isBlank()
+                    || password == null || password.isBlank()
+                    || email == null || email.isBlank()) {
+                log.warn("Admin seeding skipped variables.");
+                return;
+            }
 
             if (userRepository.existsByUsername(username)) {
                 log.info("Admin user '{}' already exists. Skipping seeding.", username);

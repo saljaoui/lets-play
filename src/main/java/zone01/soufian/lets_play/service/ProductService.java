@@ -1,12 +1,13 @@
 package zone01.soufian.lets_play.service;
 
 import java.util.List;
-import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
+import jakarta.annotation.security.PermitAll;
 import zone01.soufian.lets_play.dto.product.ProductRequest;
 import zone01.soufian.lets_play.exception.NotFoundException;
 import zone01.soufian.lets_play.model.Product;
@@ -15,18 +16,27 @@ import zone01.soufian.lets_play.model.User;
 import zone01.soufian.lets_play.repository.ProductRepository;
 
 @Service
-@RequiredArgsConstructor
 public class ProductService {
-    private final ProductRepository productRepository;
+    @Autowired
+    private ProductRepository productRepository;
 
+    @PermitAll
     public List<Product> findAll() {
         return productRepository.findAll();
     }
 
+    @PermitAll
+    public Product findById(String id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Product not found: " + id));
+    }
+
+    @PreAuthorize("isAuthenticated()")
     public Product save(Product product) {
         return productRepository.save(product);
     }
 
+    @PreAuthorize("isAuthenticated()")
     public Product update(String id, ProductRequest request, User user) {
 
         Product product = productRepository.findById(id)
@@ -43,6 +53,7 @@ public class ProductService {
         return productRepository.save(product);
     }
 
+    @PreAuthorize("isAuthenticated()")
     public void delete(String id, User user) {
 
         Product product = productRepository.findById(id)
