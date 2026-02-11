@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import zone01.soufian.lets_play.exception.NotFoundException;
 import zone01.soufian.lets_play.repository.UserRepository;
 import zone01.soufian.lets_play.security.JwtAuthFilter;
 
@@ -49,14 +50,14 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws NotFoundException {
         return config.getAuthenticationManager();
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
                                                    AuthenticationProvider authenticationProvider,
-                                                   JwtAuthFilter jwtAuthFilter) throws Exception {
+                                                   JwtAuthFilter jwtAuthFilter) throws NotFoundException {
         
         return http
             .csrf(csrf -> csrf.disable())
