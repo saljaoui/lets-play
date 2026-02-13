@@ -6,10 +6,6 @@ import java.util.Date;
 import java.util.Map;
 import java.util.function.Function;
 
-import jakarta.annotation.PostConstruct;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -19,33 +15,16 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
 
 @Service
 public class JwtService {
-
-    private static final Logger log = LoggerFactory.getLogger(JwtService.class);
 
     @Value("${security.jwt.secret:}")
     private String secret;
 
     @Value("${security.jwt.expiration-ms:3600000}")
     private long expirationMs;
-
-    @PostConstruct
-    void init() {
-        if (secret == null || secret.isBlank()) {
-            secret = generateSecret();
-            log.warn("JWT_SECRET is not set. Generated a temporary secret for this run.");
-            return;
-        }
-
-        if (resolveKeyBytes(secret).length < 32) {
-            log.warn("JWT_SECRET is too short (min 32 bytes). Generated a temporary secret for this run.");
-            secret = generateSecret();
-        }
-    }
 
     public String extractUsername(String token) {
         try {
@@ -110,7 +89,4 @@ public class JwtService {
         }
     }
 
-    private String generateSecret() {
-        return Encoders.BASE64.encode(Keys.secretKeyFor(SignatureAlgorithm.HS256).getEncoded());
-    }
 }
